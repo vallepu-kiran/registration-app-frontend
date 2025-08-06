@@ -47,9 +47,8 @@ export class AppComponent implements OnInit {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event) => {
-      const navigationEnd = event as NavigationEnd;
       const publicRoutes = ['/login', '/register'];
-      this.showNavbar = !publicRoutes.includes(navigationEnd.url);
+      this.showNavbar = !publicRoutes.includes((event as NavigationEnd).url);
     });
   }
 }
