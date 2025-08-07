@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
@@ -7,63 +8,66 @@ import { User } from '../../models/user.model';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `
-    <div class="container">
+    <div class="container-fluid py-4">
       <div class="row">
         <div class="col-12">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3 mb-0">Dashboard</h1>
-            <div class="text-muted">
-              Welcome back, {{ currentUser?.firstName }}!
+          <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4">
+            <div>
+              <h1 class="h3 mb-1">Dashboard</h1>
+              <p class="text-muted mb-0">Welcome back, {{ currentUser?.firstName }}!</p>
+            </div>
+            <div class="mt-2 mt-sm-0">
+              <span class="badge bg-success fs-6">Online</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-4 mb-4">
-          <div class="card bg-primary text-white">
+      <div class="row g-3 g-md-4 mb-4">
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="card bg-primary text-white h-100">
             <div class="card-body">
-              <div class="d-flex justify-content-between">
+              <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <h4 class="card-title">{{ totalUsers }}</h4>
-                  <p class="card-text">Total Users</p>
+                  <h4 class="card-title mb-1">{{ totalUsers }}</h4>
+                  <p class="card-text mb-0 opacity-75">Total Users</p>
                 </div>
-                <div class="align-self-center">
-                  <i class="fas fa-users fa-2x opacity-75"></i>
+                <div class="opacity-75">
+                  <i class="fas fa-users fa-2x"></i>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-          <div class="card bg-success text-white">
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="card bg-success text-white h-100">
             <div class="card-body">
-              <div class="d-flex justify-content-between">
+              <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <h4 class="card-title">Active</h4>
-                  <p class="card-text">Account Status</p>
+                  <h4 class="card-title mb-1">Active</h4>
+                  <p class="card-text mb-0 opacity-75">Account Status</p>
                 </div>
-                <div class="align-self-center">
-                  <i class="fas fa-check-circle fa-2x opacity-75"></i>
+                <div class="opacity-75">
+                  <i class="fas fa-check-circle fa-2x"></i>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-          <div class="card bg-info text-white">
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="card bg-info text-white h-100">
             <div class="card-body">
-              <div class="d-flex justify-content-between">
+              <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <h4 class="card-title">{{ getCurrentDate() }}</h4>
-                  <p class="card-text">Today's Date</p>
+                  <h4 class="card-title mb-1">{{ getCurrentDate() }}</h4>
+                  <p class="card-text mb-0 opacity-75">Today's Date</p>
                 </div>
-                <div class="align-self-center">
-                  <i class="fas fa-calendar fa-2x opacity-75"></i>
+                <div class="opacity-75">
+                  <i class="fas fa-calendar fa-2x"></i>
                 </div>
               </div>
             </div>
@@ -71,22 +75,25 @@ import { User } from '../../models/user.model';
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-8">
-          <div class="card">
-            <div class="card-header">
-              <h5 class="card-title mb-0">Quick Actions</h5>
+      <div class="row g-3 g-md-4">
+        <div class="col-12 col-lg-8">
+          <div class="card h-100">
+            <div class="card-header bg-light">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-bolt me-2 text-primary"></i>
+                Quick Actions
+              </h5>
             </div>
             <div class="card-body">
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <a href="/profile" class="btn btn-outline-primary w-100">
+              <div class="row g-3">
+                <div class="col-12 col-sm-6">
+                  <a routerLink="/profile" class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center py-3">
                     <i class="fas fa-user me-2"></i>
                     Update Profile
                   </a>
                 </div>
-                <div class="col-md-6 mb-3">
-                  <a href="/users" class="btn btn-outline-secondary w-100">
+                <div class="col-12 col-sm-6">
+                  <a routerLink="/users" class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center py-3">
                     <i class="fas fa-users me-2"></i>
                     View All Users
                   </a>
@@ -96,21 +103,25 @@ import { User } from '../../models/user.model';
           </div>
         </div>
 
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-header">
-              <h5 class="card-title mb-0">Profile Summary</h5>
+        <div class="col-12 col-lg-4">
+          <div class="card h-100">
+            <div class="card-header bg-light">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-user-circle me-2 text-primary"></i>
+                Profile Summary
+              </h5>
             </div>
-            <div class="card-body" *ngIf="currentUser">
-              <div class="text-center mb-3">
-                <div class="user-avatar mx-auto mb-2" style="width: 60px; height: 60px; font-size: 1.5rem;">
+            <div class="card-body text-center" *ngIf="currentUser">
+              <div class="mb-3">
+                <div class="user-avatar mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.5rem;">
                   {{ getUserInitials() }}
                 </div>
                 <h6 class="mb-1">{{ currentUser.firstName }} {{ currentUser.lastName }}</h6>
                 <small class="text-muted">{{ currentUser.email }}</small>
               </div>
               <div class="d-grid">
-                <a href="/profile" class="btn btn-sm btn-primary">
+                <a routerLink="/profile" class="btn btn-primary">
+                  <i class="fas fa-edit me-2"></i>
                   Edit Profile
                 </a>
               </div>
@@ -124,27 +135,57 @@ import { User } from '../../models/user.model';
     .card {
       border: none;
       box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-      border-radius: 10px;
+      border-radius: 12px;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     }
     
     .card-header {
-      background-color: #f8f9fa;
       border-bottom: 1px solid #dee2e6;
-      border-radius: 10px 10px 0 0 !important;
-    }
-    
-    .opacity-75 {
-      opacity: 0.75;
+      border-radius: 12px 12px 0 0 !important;
+      padding: 1rem 1.25rem;
     }
     
     .user-avatar {
-      background-color: #007bff;
+      background: linear-gradient(135deg, #007bff, #0056b3);
       color: white;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    }
+    
+    .btn {
+      transition: all 0.2s ease-in-out;
+    }
+    
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+    
+    .badge {
+      padding: 0.5rem 0.75rem;
+    }
+    
+    @media (max-width: 575.98px) {
+      .container-fluid {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      
+      .card-body {
+        padding: 1rem;
+      }
+      
+      .h3 {
+        font-size: 1.5rem;
+      }
     }
   `]
 })

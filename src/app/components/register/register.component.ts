@@ -9,115 +9,134 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   template: `
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-          <div class="card shadow">
-            <div class="card-body p-4">
-              <div class="text-center mb-4">
-                <h2 class="card-title">Create Account</h2>
-                <p class="text-muted">Join us today</p>
-              </div>
+    <div class="min-vh-100 d-flex align-items-center justify-content-center p-3">
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+            <div class="card shadow-lg border-0 fade-in">
+              <div class="card-body p-4 p-sm-5">
+                <div class="text-center mb-4">
+                  <div class="mb-3">
+                    <div class="user-avatar mx-auto" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                      <i class="fas fa-user-plus"></i>
+                    </div>
+                  </div>
+                  <h2 class="card-title h3 mb-2">Create Account</h2>
+                  <p class="text-muted mb-0">Join us today</p>
+                </div>
 
-              <div class="alert alert-success" *ngIf="successMessage">
-                {{ successMessage }}
-              </div>
+                <div class="alert alert-success" *ngIf="successMessage" role="alert">
+                  <i class="fas fa-check-circle me-2"></i>
+                  {{ successMessage }}
+                </div>
 
-              <div class="alert alert-danger" *ngIf="errorMessage">
-                {{ errorMessage }}
-              </div>
+                <div class="alert alert-danger" *ngIf="errorMessage" role="alert">
+                  <i class="fas fa-exclamation-triangle me-2"></i>
+                  {{ errorMessage }}
+                </div>
 
-              <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label for="firstName" class="form-label">First Name</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="firstName"
-                      formControlName="firstName"
-                      [class.is-invalid]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched"
-                    >
-                    <div class="invalid-feedback" *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
-                      First name is required
+                <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+                  <div class="row">
+                    <div class="col-12 col-sm-6 mb-3">
+                      <label for="firstName" class="form-label fw-medium">First Name</label>
+                      <input
+                        type="text"
+                        class="form-control form-control-lg"
+                        id="firstName"
+                        formControlName="firstName"
+                        placeholder="First name"
+                        autocomplete="given-name"
+                        [class.is-invalid]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched"
+                      >
+                      <div class="invalid-feedback" *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+                        First name is required
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 mb-3">
+                      <label for="lastName" class="form-label fw-medium">Last Name</label>
+                      <input
+                        type="text"
+                        class="form-control form-control-lg"
+                        id="lastName"
+                        formControlName="lastName"
+                        placeholder="Last name"
+                        autocomplete="family-name"
+                        [class.is-invalid]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched"
+                      >
+                      <div class="invalid-feedback" *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+                        Last name is required
+                      </div>
                     </div>
                   </div>
 
-                  <div class="col-md-6 mb-3">
-                    <label for="lastName" class="form-label">Last Name</label>
+                  <div class="mb-3">
+                    <label for="email" class="form-label fw-medium">Email Address</label>
                     <input
-                      type="text"
-                      class="form-control"
-                      id="lastName"
-                      formControlName="lastName"
-                      [class.is-invalid]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched"
+                      type="email"
+                      class="form-control form-control-lg"
+                      id="email"
+                      formControlName="email"
+                      placeholder="Enter your email"
+                      autocomplete="email"
+                      [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
                     >
-                    <div class="invalid-feedback" *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
-                      Last name is required
+                    <div class="invalid-feedback" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                      <div *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</div>
+                      <div *ngIf="registerForm.get('email')?.errors?.['email']">Please enter a valid email</div>
                     </div>
                   </div>
-                </div>
 
-                <div class="mb-3">
-                  <label for="email" class="form-label">Email</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="email"
-                    formControlName="email"
-                    [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
-                  >
-                  <div class="invalid-feedback" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
-                    <div *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</div>
-                    <div *ngIf="registerForm.get('email')?.errors?.['email']">Please enter a valid email</div>
+                  <div class="mb-3">
+                    <label for="password" class="form-label fw-medium">Password</label>
+                    <input
+                      type="password"
+                      class="form-control form-control-lg"
+                      id="password"
+                      formControlName="password"
+                      placeholder="Create a password"
+                      autocomplete="new-password"
+                      [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+                    >
+                    <div class="invalid-feedback" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+                      <div *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</div>
+                      <div *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</div>
+                    </div>
                   </div>
-                </div>
 
-                <div class="mb-3">
-                  <label for="password" class="form-label">Password</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="password"
-                    formControlName="password"
-                    [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-                  >
-                  <div class="invalid-feedback" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-                    <div *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</div>
-                    <div *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</div>
+                  <div class="mb-4">
+                    <label for="confirmPassword" class="form-label fw-medium">Confirm Password</label>
+                    <input
+                      type="password"
+                      class="form-control form-control-lg"
+                      id="confirmPassword"
+                      formControlName="confirmPassword"
+                      placeholder="Confirm your password"
+                      autocomplete="new-password"
+                      [class.is-invalid]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched"
+                    >
+                    <div class="invalid-feedback" *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+                      <div *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Please confirm your password</div>
+                      <div *ngIf="registerForm.errors?.['passwordMismatch']">Passwords do not match</div>
+                    </div>
                   </div>
-                </div>
 
-                <div class="mb-3">
-                  <label for="confirmPassword" class="form-label">Confirm Password</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="confirmPassword"
-                    formControlName="confirmPassword"
-                    [class.is-invalid]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched"
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-lg w-100 mb-3"
+                    [disabled]="registerForm.invalid || isLoading"
                   >
-                  <div class="invalid-feedback" *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
-                    <div *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Please confirm your password</div>
-                    <div *ngIf="registerForm.errors?.['passwordMismatch']">Passwords do not match</div>
-                  </div>
+                    <span class="spinner-border spinner-border-sm me-2" *ngIf="isLoading" role="status" aria-hidden="true"></span>
+                    {{ isLoading ? 'Creating Account...' : 'Create Account' }}
+                  </button>
+                </form>
+
+                <div class="text-center">
+                  <p class="mb-0 text-muted">
+                    Already have an account?
+                    <a routerLink="/login" class="text-decoration-none fw-medium ms-1">Sign in</a>
+                  </p>
                 </div>
-
-                <button
-                  type="submit"
-                  class="btn btn-primary w-100"
-                  [disabled]="registerForm.invalid || isLoading"
-                >
-                  <span class="spinner-border spinner-border-sm me-2" *ngIf="isLoading"></span>
-                  {{ isLoading ? 'Creating Account...' : 'Create Account' }}
-                </button>
-              </form>
-
-              <div class="text-center mt-3">
-                <p class="mb-0">
-                  Already have an account?
-                  <a routerLink="/login" class="text-decoration-none">Sign in</a>
-                </p>
               </div>
             </div>
           </div>
@@ -126,26 +145,53 @@ import { AuthService } from '../../services/auth.service';
     </div>
   `,
   styles: [`
-    .container {
+    .min-vh-100 {
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 2rem 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
     
     .card {
-      border: none;
-      border-radius: 10px;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.95);
     }
     
-    .form-control {
-      border-radius: 8px;
-      padding: 12px;
+    .form-control-lg {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
     }
     
-    .btn {
-      border-radius: 8px;
-      padding: 12px;
+    .btn-lg {
+      padding: 0.75rem 1.5rem;
+      font-size: 1.1rem;
+    }
+    
+    @media (max-width: 575.98px) {
+      .card-body {
+        padding: 2rem 1.5rem !important;
+      }
+      
+      .h3 {
+        font-size: 1.5rem;
+      }
+      
+      .row > .col-12:not(:last-child) {
+        margin-bottom: 0;
+      }
+    }
+    
+    .fade-in {
+      animation: fadeInUp 0.6s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   `]
 })
