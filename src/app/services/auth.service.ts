@@ -85,6 +85,10 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
+  updateCurrentUser(user: User): void {
+    this.currentUserSubject.next(user);
+  }
+
   private clearAuthData(): void {
     localStorage.removeItem('token');
     this.currentUserSubject.next(null);

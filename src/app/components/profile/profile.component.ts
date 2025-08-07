@@ -380,42 +380,53 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.currentUser$.subscribe(user => {
-      this.currentUser = user;
-      if (user) {
-        this.profileForm.patchValue({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          phoneNumber: user.phoneNumber || '',
-          city: user.city || '',
-          state: user.state || '',
-          country: user.country || ''
-        });
-      }
-    });
+  // First, get current user from auth service and populate form
+  this.authService.currentUser$.subscribe(user => {
+    this.currentUser = user;
+    if (user) {
+      this.profileForm.patchValue({
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        email: user.email || '',
+        phoneNumber: user.phoneNumber || '',
+        city: user.city || '',
+        state: user.state || '',
+        country: user.country || ''
+      });
+    }
+  });
 
-    this.loadProfile();
-  }
+  // Then load fresh profile data from API
+  this.loadProfile();
+}
 
   loadProfile() {
-    this.userService.getProfile().subscribe({
-      next: (user) => {
-        this.profileForm.patchValue({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          phoneNumber: user.phoneNumber || '',
-          city: user.city || '',
-          state: user.state || '',
-          country: user.country || ''
-        });
-      },
-      error: (error) => {
-        this.errorMessage = 'Failed to load profile data';
-      }
-    });
-  }
+  this.userService.getProfile().subscribe({
+    next: (user) => {
+      // Update current user in auth service
+      this.currentUser = user;
+      
+      // Populate form with all user data
+      this.profileForm.patchValue({
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        email: user.email || '',
+        phoneNumber: user.phoneNumber || '',
+        city: user.city || '',
+        state: user.state || '',
+        country: user.country || ''
+      });
+      
+      // Clear any previous messages
+      this.successMessage = '';
+      this.errorMessage = '';
+    },
+    error: (error) => {
+      this.errorMessage = 'Failed to load profile data';
+      console.error('Profile load error:', error);
+    }
+  });
+}
 
   updateProfile() {
     if (this.profileForm.valid) {
@@ -432,18 +443,22 @@ export class ProfileComponent implements OnInit {
         }
       });
 
-      this.userService.updateProfile(updateData).subscribe({
-        next: (response) => {
-          this.isUpdating = false;
-          this.successMessage = 'Profile updated successfully!';
-          // Update current user in auth service
-          this.authService.verifyToken().subscribe();
-        },
-        error: (error) => {
-          this.isUpdating = false;
-          this.errorMessage = error.error?.message || 'Failed to update profile';
-        }
-      });
+    this.userService.updateProfile(updateData).subscribe({
+      next: (response) => {
+        this.isUpdating = false;
+        this.successMessage = 'Profile updated successfully!';
+        
+        // Refresh the profile data to get the latest information
+        this.loadProfile();
+        
+        // Also refresh the auth service user data
+        this.authService.verifyToken().subscribe();
+      },
+      error: (error) => {
+        this.isUpdating = false;
+        this.errorMessage = error.error?.message || 'Failed to update profile';
+      }
+    });
     }
   }
 
