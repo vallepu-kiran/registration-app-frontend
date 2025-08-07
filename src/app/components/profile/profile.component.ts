@@ -380,10 +380,14 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
+  console.log('ProfileComponent ngOnInit started');
+  
   // First, get current user from auth service and populate form
   this.authService.currentUser$.subscribe(user => {
+    console.log('Current user from auth service:', user);
     this.currentUser = user;
     if (user) {
+      console.log('Populating form with user data:', user);
       this.profileForm.patchValue({
         firstName: user.firstName || '',
         lastName: user.lastName || '',
@@ -393,6 +397,7 @@ export class ProfileComponent implements OnInit {
         state: user.state || '',
         country: user.country || ''
       });
+      console.log('Form values after patch:', this.profileForm.value);
     }
   });
 
@@ -401,10 +406,13 @@ export class ProfileComponent implements OnInit {
 }
 
   loadProfile() {
+  console.log('Loading profile from API...');
   this.userService.getProfile().subscribe({
     next: (user) => {
+      console.log('Profile data received from API:', user);
       // Update current user in auth service
       this.currentUser = user;
+      this.authService.updateCurrentUser(user);
       
       // Populate form with all user data
       this.profileForm.patchValue({
@@ -417,13 +425,31 @@ export class ProfileComponent implements OnInit {
         country: user.country || ''
       });
       
+      console.log('Form values after API load:', this.profileForm.value);
+      
       // Clear any previous messages
       this.successMessage = '';
       this.errorMessage = '';
     },
     error: (error) => {
-      this.errorMessage = 'Failed to load profile data';
       console.error('Profile load error:', error);
+      this.errorMessage = 'Failed to load profile data';
+      
+      // If API fails, try to use current user from auth service
+      const currentUser = this.authService.getCurrentUser();
+      if (currentUser) {
+        console.log('Using fallback user data from auth service:', currentUser);
+        this.currentUser = currentUser;
+        this.profileForm.patchValue({
+          firstName: currentUser.firstName || '',
+          lastName: currentUser.lastName || '',
+          email: currentUser.email || '',
+          phoneNumber: currentUser.phoneNumber || '',
+          city: currentUser.city || '',
+          state: currentUser.state || '',
+          country: currentUser.country || ''
+        });
+      }
     }
   });
 }

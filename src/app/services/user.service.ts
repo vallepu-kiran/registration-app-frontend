@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { User, ApiResponse, ChangePasswordRequest, UpdateProfileRequest } from '../models/user.model';
 
 @Injectable({
@@ -12,7 +13,19 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getProfile(): Observable<User> {
-    return this.http.get<User>(`${this.API_URL}/users/profile`);
+    return this.http.get<ApiResponse<User>>(`${this.API_URL}/users/profile`).pipe(
+      map(response => {
+        // Handle both direct user response and wrapped response
+        if (response.user) {
+          return response.user;
+        } else if (response.data) {
+          return response.data;
+        } else {
+          // If response is directly a user object
+          return response as any as User;
+        }
+      })
+    );
   }
 
   updateProfile(userData: UpdateProfileRequest): Observable<ApiResponse> {
