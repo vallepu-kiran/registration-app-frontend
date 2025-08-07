@@ -10,101 +10,199 @@ import { User } from '../../models/user.model';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="container">
+    <div class="container-fluid py-4">
       <div class="row">
         <div class="col-12">
-          <h1 class="h3 mb-4">Profile Settings</h1>
+          <h1 class="h3 mb-4">
+            <i class="fas fa-user-cog me-2 text-primary"></i>
+            Profile Settings
+          </h1>
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-8">
-          <div class="card">
-            <div class="card-header">
-              <h5 class="card-title mb-0">Personal Information</h5>
+      <div class="row g-4">
+        <div class="col-12 col-xl-8">
+          <div class="card h-100">
+            <div class="card-header bg-light">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-user me-2 text-primary"></i>
+                Personal Information
+              </h5>
             </div>
             <div class="card-body">
               <div class="alert alert-success" *ngIf="successMessage">
+                <i class="fas fa-check-circle me-2"></i>
                 {{ successMessage }}
               </div>
 
               <div class="alert alert-danger" *ngIf="errorMessage">
+                <i class="fas fa-exclamation-triangle me-2"></i>
                 {{ errorMessage }}
               </div>
 
               <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label for="firstName" class="form-label">First Name</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="firstName"
-                      formControlName="firstName"
-                      [class.is-invalid]="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched"
-                    >
-                    <div class="invalid-feedback" *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched">
-                      First name is required
+                <!-- Basic Information -->
+                <div class="mb-4">
+                  <h6 class="text-muted mb-3">
+                    <i class="fas fa-id-card me-2"></i>
+                    Basic Information
+                  </h6>
+                  
+                  <div class="row">
+                    <div class="col-12 col-md-6 mb-3">
+                      <label for="firstName" class="form-label fw-medium">First Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="firstName"
+                        formControlName="firstName"
+                        [class.is-invalid]="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched"
+                      >
+                      <div class="invalid-feedback" *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched">
+                        First name is required
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 mb-3">
+                      <label for="lastName" class="form-label fw-medium">Last Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="lastName"
+                        formControlName="lastName"
+                        [class.is-invalid]="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched"
+                      >
+                      <div class="invalid-feedback" *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched">
+                        Last name is required
+                      </div>
                     </div>
                   </div>
 
-                  <div class="col-md-6 mb-3">
-                    <label for="lastName" class="form-label">Last Name</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="lastName"
-                      formControlName="lastName"
-                      [class.is-invalid]="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched"
-                    >
-                    <div class="invalid-feedback" *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched">
-                      Last name is required
+                  <div class="row">
+                    <div class="col-12 col-md-6 mb-3">
+                      <label for="email" class="form-label fw-medium">Email Address</label>
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        formControlName="email"
+                        readonly
+                      >
+                      <small class="form-text text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Email cannot be changed
+                      </small>
+                    </div>
+
+                    <div class="col-12 col-md-6 mb-3">
+                      <label for="phoneNumber" class="form-label fw-medium">Phone Number</label>
+                      <input
+                        type="tel"
+                        class="form-control"
+                        id="phoneNumber"
+                        formControlName="phoneNumber"
+                        placeholder="Enter phone number"
+                        [class.is-invalid]="profileForm.get('phoneNumber')?.invalid && profileForm.get('phoneNumber')?.touched"
+                      >
+                      <div class="invalid-feedback" *ngIf="profileForm.get('phoneNumber')?.invalid && profileForm.get('phoneNumber')?.touched">
+                        Please enter a valid phone number (10 digits)
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div class="mb-3">
-                  <label for="email" class="form-label">Email</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="email"
-                    formControlName="email"
-                    readonly
+                <!-- Address Information -->
+                <div class="mb-4">
+                  <h6 class="text-muted mb-3">
+                    <i class="fas fa-map-marker-alt me-2"></i>
+                    Address Information
+                  </h6>
+                  
+                  <div class="row">
+                    <div class="col-12 col-md-6 mb-3">
+                      <label for="city" class="form-label fw-medium">City</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="city"
+                        formControlName="city"
+                        placeholder="Enter your city"
+                      >
+                    </div>
+
+                    <div class="col-12 col-md-6 mb-3">
+                      <label for="state" class="form-label fw-medium">State</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="state"
+                        formControlName="state"
+                        placeholder="Enter your state"
+                      >
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="country" class="form-label fw-medium">Country</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="country"
+                      formControlName="country"
+                      placeholder="Enter your country"
+                    >
+                  </div>
+                </div>
+
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    [disabled]="profileForm.invalid || isUpdating"
                   >
-                  <small class="form-text text-muted">Email cannot be changed</small>
+                    <span class="spinner-border spinner-border-sm me-2" *ngIf="isUpdating"></span>
+                    <i class="fas fa-save me-2" *ngIf="!isUpdating"></i>
+                    {{ isUpdating ? 'Updating...' : 'Update Profile' }}
+                  </button>
+                  
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    (click)="loadProfile()"
+                    [disabled]="isUpdating"
+                  >
+                    <i class="fas fa-undo me-2"></i>
+                    Reset
+                  </button>
                 </div>
-
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  [disabled]="profileForm.invalid || isUpdating"
-                >
-                  <span class="spinner-border spinner-border-sm me-2" *ngIf="isUpdating"></span>
-                  {{ isUpdating ? 'Updating...' : 'Update Profile' }}
-                </button>
               </form>
             </div>
           </div>
         </div>
 
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-header">
-              <h5 class="card-title mb-0">Change Password</h5>
+        <div class="col-12 col-xl-4">
+          <!-- Change Password Card -->
+          <div class="card mb-4">
+            <div class="card-header bg-warning text-dark">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-key me-2"></i>
+                Change Password
+              </h5>
             </div>
             <div class="card-body">
               <div class="alert alert-success" *ngIf="passwordSuccessMessage">
+                <i class="fas fa-check-circle me-2"></i>
                 {{ passwordSuccessMessage }}
               </div>
 
               <div class="alert alert-danger" *ngIf="passwordErrorMessage">
+                <i class="fas fa-exclamation-triangle me-2"></i>
                 {{ passwordErrorMessage }}
               </div>
 
               <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
                 <div class="mb-3">
-                  <label for="oldPassword" class="form-label">Current Password</label>
+                  <label for="oldPassword" class="form-label fw-medium">Current Password</label>
                   <input
                     type="password"
                     class="form-control"
@@ -118,7 +216,7 @@ import { User } from '../../models/user.model';
                 </div>
 
                 <div class="mb-3">
-                  <label for="newPassword" class="form-label">New Password</label>
+                  <label for="newPassword" class="form-label fw-medium">New Password</label>
                   <input
                     type="password"
                     class="form-control"
@@ -138,15 +236,50 @@ import { User } from '../../models/user.model';
                   [disabled]="passwordForm.invalid || isChangingPassword"
                 >
                   <span class="spinner-border spinner-border-sm me-2" *ngIf="isChangingPassword"></span>
+                  <i class="fas fa-key me-2" *ngIf="!isChangingPassword"></i>
                   {{ isChangingPassword ? 'Changing...' : 'Change Password' }}
                 </button>
               </form>
             </div>
           </div>
 
-          <div class="card mt-4">
+          <!-- Profile Summary Card -->
+          <div class="card mb-4" *ngIf="currentUser">
+            <div class="card-header bg-info text-white">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-user-circle me-2"></i>
+                Profile Summary
+              </h5>
+            </div>
+            <div class="card-body text-center">
+              <div class="user-avatar mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
+                {{ getUserInitials() }}
+              </div>
+              <h6 class="mb-1">{{ currentUser.firstName }} {{ currentUser.lastName }}</h6>
+              <p class="text-muted mb-2">{{ currentUser.email }}</p>
+              
+              <div class="text-start mt-3">
+                <small class="text-muted d-block" *ngIf="currentUser.phoneNumber">
+                  <i class="fas fa-phone me-2"></i>{{ currentUser.phoneNumber }}
+                </small>
+                <small class="text-muted d-block" *ngIf="currentUser.city || currentUser.state">
+                  <i class="fas fa-map-marker-alt me-2"></i>
+                  {{ getLocationString() }}
+                </small>
+                <small class="text-muted d-block" *ngIf="currentUser.country">
+                  <i class="fas fa-globe me-2"></i>{{ currentUser.country }}
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Danger Zone Card -->
+          <div class="card">
             <div class="card-header bg-danger text-white">
-              <h5 class="card-title mb-0">Danger Zone</h5>
+              <h5 class="card-title mb-0">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Danger Zone
+              </h5>
             </div>
             <div class="card-body">
               <p class="text-muted mb-3">
@@ -158,6 +291,7 @@ import { User } from '../../models/user.model';
                 [disabled]="isDeleting"
               >
                 <span class="spinner-border spinner-border-sm me-2" *ngIf="isDeleting"></span>
+                <i class="fas fa-trash me-2" *ngIf="!isDeleting"></i>
                 {{ isDeleting ? 'Deleting...' : 'Delete Account' }}
               </button>
             </div>
@@ -170,17 +304,43 @@ import { User } from '../../models/user.model';
     .card {
       border: none;
       box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-      border-radius: 10px;
+      border-radius: 12px;
     }
     
     .card-header {
-      background-color: #f8f9fa;
       border-bottom: 1px solid #dee2e6;
-      border-radius: 10px 10px 0 0 !important;
+      border-radius: 12px 12px 0 0 !important;
+      padding: 1rem 1.25rem;
     }
     
-    .card-header.bg-danger {
-      background-color: #dc3545 !important;
+    .user-avatar {
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    }
+    
+    h6 {
+      color: #6c757d;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+      letter-spacing: 0.5px;
+    }
+    
+    @media (max-width: 575.98px) {
+      .container-fluid {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      
+      .card-body {
+        padding: 1rem;
+      }
     }
   `]
 })
@@ -206,7 +366,11 @@ export class ProfileComponent implements OnInit {
     this.profileForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['']
+      email: [''],
+      phoneNumber: ['', [Validators.pattern(/^\d{10}$/)]],
+      city: [''],
+      state: [''],
+      country: ['']
     });
 
     this.passwordForm = this.fb.group({
@@ -222,7 +386,11 @@ export class ProfileComponent implements OnInit {
         this.profileForm.patchValue({
           firstName: user.firstName,
           lastName: user.lastName,
-          email: user.email
+          email: user.email,
+          phoneNumber: user.phoneNumber || '',
+          city: user.city || '',
+          state: user.state || '',
+          country: user.country || ''
         });
       }
     });
@@ -236,7 +404,11 @@ export class ProfileComponent implements OnInit {
         this.profileForm.patchValue({
           firstName: user.firstName,
           lastName: user.lastName,
-          email: user.email
+          email: user.email,
+          phoneNumber: user.phoneNumber || '',
+          city: user.city || '',
+          state: user.state || '',
+          country: user.country || ''
         });
       },
       error: (error) => {
@@ -252,6 +424,13 @@ export class ProfileComponent implements OnInit {
       this.errorMessage = '';
 
       const { email, ...updateData } = this.profileForm.value;
+      
+      // Remove empty fields
+      Object.keys(updateData).forEach(key => {
+        if (updateData[key] === '' || updateData[key] === null) {
+          delete updateData[key];
+        }
+      });
 
       this.userService.updateProfile(updateData).subscribe({
         next: (response) => {
@@ -304,5 +483,22 @@ export class ProfileComponent implements OnInit {
         }
       });
     }
+  }
+
+  getUserInitials(): string {
+    if (this.currentUser) {
+      return `${this.currentUser.firstName.charAt(0)}${this.currentUser.lastName.charAt(0)}`.toUpperCase();
+    }
+    return '';
+  }
+
+  getLocationString(): string {
+    if (this.currentUser) {
+      const parts = [];
+      if (this.currentUser.city) parts.push(this.currentUser.city);
+      if (this.currentUser.state) parts.push(this.currentUser.state);
+      return parts.join(', ');
+    }
+    return '';
   }
 }

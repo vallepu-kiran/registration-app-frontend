@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User, ApiResponse, ChangePasswordRequest } from '../models/user.model';
+import { User, ApiResponse, ChangePasswordRequest, UpdateProfileRequest } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class UserService {
     return this.http.get<User>(`${this.API_URL}/users/profile`);
   }
 
-  updateProfile(userData: Partial<User>): Observable<ApiResponse> {
+  updateProfile(userData: UpdateProfileRequest): Observable<ApiResponse> {
     return this.http.put<ApiResponse>(`${this.API_URL}/users/profile`, userData);
   }
 

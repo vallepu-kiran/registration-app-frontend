@@ -3,6 +3,10 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
+  phoneNumber?: string;
+  city?: string;
+  state?: string;
+  country?: string;
 }
 
 export interface RegisterRequest {
@@ -10,6 +14,10 @@ export interface RegisterRequest {
   lastName: string;
   email: string;
   password: string;
+  phoneNumber?: string;
+  city?: string;
+  state?: string;
+  country?: string;
 }
 
 export interface LoginRequest {
@@ -31,4 +39,13 @@ export interface ApiResponse<T = any> {
 export interface ChangePasswordRequest {
   oldPassword: string;
   newPassword: string;
+}
+
+export interface UpdateProfileRequest {
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+  city?: string;
+  state?: string;
+  country?: string;
 }
