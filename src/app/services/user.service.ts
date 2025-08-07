@@ -23,10 +23,6 @@ export class UserService {
     return this.http.put<ApiResponse>(`${this.API_URL}/users/change-password`, passwordData);
   }
 
-  getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.API_URL}/users/`);
-  }
-
   deleteAccount(): Observable<ApiResponse> {
     return this.http.delete<ApiResponse>(`${this.API_URL}/users/account`);
   }

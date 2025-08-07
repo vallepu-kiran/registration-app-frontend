@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 
 @Component({
@@ -31,11 +30,11 @@ import { User } from '../../models/user.model';
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <h4 class="card-title mb-1">{{ totalUsers }}</h4>
-                  <p class="card-text mb-0 opacity-75">Total Users</p>
+                  <h4 class="card-title mb-1">Active</h4>
+                  <p class="card-text mb-0 opacity-75">Account Status</p>
                 </div>
                 <div class="opacity-75">
-                  <i class="fas fa-users fa-2x"></i>
+                  <i class="fas fa-check-circle fa-2x"></i>
                 </div>
               </div>
             </div>
@@ -47,11 +46,11 @@ import { User } from '../../models/user.model';
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <h4 class="card-title mb-1">Active</h4>
-                  <p class="card-text mb-0 opacity-75">Account Status</p>
+                  <h4 class="card-title mb-1">Secure</h4>
+                  <p class="card-text mb-0 opacity-75">Data Protection</p>
                 </div>
                 <div class="opacity-75">
-                  <i class="fas fa-check-circle fa-2x"></i>
+                  <i class="fas fa-shield-alt fa-2x"></i>
                 </div>
               </div>
             </div>
@@ -93,10 +92,20 @@ import { User } from '../../models/user.model';
                   </a>
                 </div>
                 <div class="col-12 col-sm-6">
-                  <a routerLink="/users" class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center py-3">
-                    <i class="fas fa-users me-2"></i>
-                    View All Users
-                  </a>
+                  <button class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center py-3" disabled>
+                    <i class="fas fa-cog me-2"></i>
+                    Settings
+                  </button>
+                </div>
+              </div>
+              
+              <div class="row g-3 mt-2">
+                <div class="col-12">
+                  <div class="alert alert-info mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Welcome to your dashboard!</strong> 
+                    You can manage your profile and account settings from here.
+                  </div>
                 </div>
               </div>
             </div>
@@ -118,6 +127,19 @@ import { User } from '../../models/user.model';
                 </div>
                 <h6 class="mb-1">{{ currentUser.firstName }} {{ currentUser.lastName }}</h6>
                 <small class="text-muted">{{ currentUser.email }}</small>
+                
+                <div class="mt-3 text-start">
+                  <small class="text-muted d-block" *ngIf="currentUser.phoneNumber">
+                    <i class="fas fa-phone me-2"></i>{{ currentUser.phoneNumber }}
+                  </small>
+                  <small class="text-muted d-block" *ngIf="currentUser.city || currentUser.state">
+                    <i class="fas fa-map-marker-alt me-2"></i>
+                    {{ getLocationString() }}
+                  </small>
+                  <small class="text-muted d-block" *ngIf="currentUser.country">
+                    <i class="fas fa-globe me-2"></i>{{ currentUser.country }}
+                  </small>
+                </div>
               </div>
               <div class="d-grid">
                 <a routerLink="/profile" class="btn btn-primary">
@@ -165,7 +187,7 @@ import { User } from '../../models/user.model';
       transition: all 0.2s ease-in-out;
     }
     
-    .btn:hover {
+    .btn:hover:not(:disabled) {
       transform: translateY(-1px);
     }
     
@@ -191,29 +213,12 @@ import { User } from '../../models/user.model';
 })
 export class DashboardComponent implements OnInit {
   currentUser: User | null = null;
-  totalUsers = 0;
 
-  constructor(
-    private authService: AuthService,
-    private userService: UserService
-  ) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
-    });
-
-    this.loadTotalUsers();
-  }
-
-  loadTotalUsers() {
-    this.userService.getAllUsers().subscribe({
-      next: (users) => {
-        this.totalUsers = users.length;
-      },
-      error: (error) => {
-        console.error('Error loading users:', error);
-      }
     });
   }
 
@@ -226,5 +231,15 @@ export class DashboardComponent implements OnInit {
 
   getCurrentDate(): string {
     return new Date().toLocaleDateString();
+  }
+
+  getLocationString(): string {
+    if (this.currentUser) {
+      const parts = [];
+      if (this.currentUser.city) parts.push(this.currentUser.city);
+      if (this.currentUser.state) parts.push(this.currentUser.state);
+      return parts.join(', ');
+    }
+    return '';
   }
 }
